@@ -1,54 +1,57 @@
-
 import React, { useState } from 'react';
+import {
+    DocumentTextIcon,
+    CreditCardIcon,
+    BanknotesIcon,
+    SignalIcon,
+    EyeIcon,
+    BuildingLibraryIcon,
+    ClockIcon,
+    KeyIcon,
+    ArrowsRightLeftIcon,
+    ReceiptPercentIcon,
+    TruckIcon,
+    BookOpenIcon,
+    QuestionMarkCircleIcon,
+    LightBulbIcon,
+} from '../components/icons';
 
 type ServiceTab = 'کارتخوان' | 'درگاه پرداخت';
 
-const ServiceTile: React.FC<{ title: string }> = ({ title }) => (
-  <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg flex items-center justify-center text-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-24">
-    <h3 className="font-semibold text-indigo-600 dark:text-indigo-400">{title}</h3>
+const ServiceGridTile: React.FC<{ title: string; Icon: React.FC<{className?: string}>; bgClassName: string }> = ({ title, Icon, bgClassName }) => (
+  <div className={`${bgClassName} p-4 rounded-2xl shadow-lg flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-32`}>
+    <div className="w-12 h-12 flex items-center justify-center mb-2">
+      <Icon className="w-10 h-10 text-white" />
+    </div>
+    <h3 className="font-semibold text-white text-sm">{title}</h3>
   </div>
 );
 
-const ServiceSection: React.FC<{ title: string; services: string[] }> = ({ title, services }) => (
-    <div>
-        <h2 className="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200">{title}</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {services.map(service => <ServiceTile key={service} title={service} />)}
-        </div>
-    </div>
-);
+const allServices = [
+    { title: "درخواست کاغذ", Icon: DocumentTextIcon, bgClassName: 'bg-teal-500' },
+    { title: "چک", Icon: CreditCardIcon, bgClassName: 'bg-sky-500' },
+    { title: "ودیعه کارتخوان", Icon: BanknotesIcon, bgClassName: 'bg-emerald-500' },
+    { title: "آبونمان سیم کارت", Icon: SignalIcon, bgClassName: 'bg-rose-500' },
+    { title: "مشاهده شماره کارت مشتری", Icon: EyeIcon, bgClassName: 'bg-violet-500' },
+    { title: "مشاهده وضعیت بانک‌ها", Icon: BuildingLibraryIcon, bgClassName: 'bg-amber-500' },
+    { title: "تاریخچه مراجعات پشتیبان", Icon: ClockIcon, bgClassName: 'bg-blue-500' },
+    { title: "بازنشانی رمز", Icon: KeyIcon, bgClassName: 'bg-slate-600' },
+    { title: "کارت به کارت", Icon: ArrowsRightLeftIcon, bgClassName: 'bg-cyan-500' },
+    { title: "قبوض", Icon: ReceiptPercentIcon, bgClassName: 'bg-orange-500' },
+    { title: "خودرو", Icon: TruckIcon, bgClassName: 'bg-lime-500' },
+    { title: "آموزش", Icon: BookOpenIcon, bgClassName: 'bg-fuchsia-500' },
+    { title: "راهنمای کارتخوان", Icon: QuestionMarkCircleIcon, bgClassName: 'bg-indigo-500' },
+    { title: "ثبت پیشنهاد", Icon: LightBulbIcon, bgClassName: 'bg-yellow-500' },
+];
 
 const ServicesPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<ServiceTab>('کارتخوان');
-
-    const posServices = {
-        "کارتخوان": [
-            "درخواست کاغذ",
-            "چک (ثبت/تایید/یادآوری)",
-            "ودیعه کارتخوان",
-            "آبونمان سیم کارت",
-            "مشاهده شماره کارت مشتری",
-            "مشاهده وضعیت بانک‌ها",
-            "تاریخچه مراجعات پشتیبان",
-            "بازنشانی رمز"
-        ],
-        "کاربردی روزمره": [
-            "کارت به کارت",
-            "قبوض",
-            "خودرو"
-        ],
-        "آموزش": [
-            "آموزش",
-            "راهنمای کارتخوان",
-            "ثبت پیشنهاد"
-        ]
-    };
-
     const hasPaymentGateway = false; // Mock data
 
     return (
-        <div className="p-4 space-y-8">
-            <div className="flex justify-center bg-slate-200 dark:bg-slate-800 p-1 rounded-xl mb-6">
+        <div className="p-4 space-y-6">
+             <h1 className="text-2xl font-extrabold text-center text-slate-800 dark:text-slate-200">سرویس‌ها</h1>
+            <div className="flex justify-center bg-slate-200 dark:bg-slate-800 p-1 rounded-xl">
                 {(['کارتخوان', 'درگاه پرداخت'] as ServiceTab[]).map(tab => (
                     <button
                         key={tab}
@@ -61,17 +64,17 @@ const ServicesPage: React.FC = () => {
             </div>
 
             {activeTab === 'کارتخوان' && (
-                <div className="space-y-8">
-                    {Object.entries(posServices).map(([title, services]) => (
-                        <ServiceSection key={title} title={title} services={services} />
-                    ))}
+                <div className="grid grid-cols-2 gap-4 animate-fade-in">
+                   {allServices.map(service => (
+                       <ServiceGridTile key={service.title} {...service} />
+                   ))}
                 </div>
             )}
 
             {activeTab === 'درگاه پرداخت' && (
-                <div>
+                <div className="animate-fade-in">
                     {hasPaymentGateway ? (
-                        <p>اطلاعات درگاه پرداخت شما در اینجا نمایش داده می‌شود.</p>
+                        <p className="text-center text-slate-500 dark:text-slate-400">اطلاعات درگاه پرداخت شما در اینجا نمایش داده می‌شود.</p>
                     ) : (
                         <div className="text-center bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg">
                             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-2">شما درگاه فعالی ندارید</h3>

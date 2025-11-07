@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PlusIcon, ChevronLeftIcon, UploadIcon } from '../components/icons';
 
@@ -195,15 +194,15 @@ const SalesPage: React.FC = () => {
         <div className="space-y-4">
           <PromotionTile 
             title="تبلیغ روی نقشه" 
-            subtitle="تبلیغ با بودجه دلخواه و پرداخت به ازای هر کلیک" 
+            subtitle="کسب‌وکار خود را در نقشه به مشتریان نزدیک نمایش دهید." 
           />
           <PromotionTile 
             title="کوپن‌ها" 
-            subtitle="تعریف پیشنهادهای جذاب برای مشتریان" 
+            subtitle="با ارائه تخفیف و کوپن، مشتریان وفادار جذب کنید." 
           />
           <PromotionTile 
             title="تبلیغ پیامکی" 
-            subtitle="فعال‌سازی بسته تبلیغ پیامکی"
+            subtitle="به مشتریان منطقه خود پیامک تبلیغاتی هدفمند ارسال کنید."
             onClick={() => setView('sms_campaign')}
           />
         </div>
