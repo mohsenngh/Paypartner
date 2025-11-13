@@ -1,43 +1,51 @@
-
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ThemeContext } from './context/ThemeContext';
-import { Page } from './types';
-import BottomNav from './components/BottomNav';
-import ReportsPage from './pages/ReportsPage';
-import SupportPage from './pages/SupportPage';
-import ServicesPage from './pages/ServicesPage';
-import SalesPage from './pages/SalesPage';
-import ManagementPage from './pages/ManagementPage';
+import { useAuth } from './context/AuthContext';
+import Dashboard from './pages/Dashboard';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegistrationFlow from './pages/RegistrationFlow';
+
+type View = 'landing' | 'login' | 'register';
 
 const App: React.FC = () => {
-  const [activePage, setActivePage] = useState<Page>(Page.Reports);
+  const { isAuthenticated } = useAuth();
   const { theme } = useContext(ThemeContext);
+  const [view, setView] = useState<View>('landing');
+  const prevIsAuthenticated = useRef(isAuthenticated);
 
-  const renderPage = () => {
-    switch (activePage) {
-      case Page.Reports:
-        return <ReportsPage />;
-      case Page.Support:
-        return <SupportPage />;
-      case Page.Services:
-        return <ServicesPage />;
-      case Page.Sales:
-        return <SalesPage />;
-      case Page.Management:
-        return <ManagementPage />;
+  useEffect(() => {
+    // When user logs out (isAuthenticated changes from true to false)
+    if (prevIsAuthenticated.current && !isAuthenticated) {
+      setView('login');
+    }
+    prevIsAuthenticated.current = isAuthenticated;
+  }, [isAuthenticated]);
+
+
+  const handleNavigate = (target: View) => {
+    setView(target);
+  };
+  
+  const renderContent = () => {
+    if (isAuthenticated) {
+      return <Dashboard />;
+    }
+
+    switch (view) {
+      case 'login':
+        return <LoginPage onBack={() => setView('landing')} />;
+      case 'register':
+        return <RegistrationFlow onBackToLanding={() => setView('landing')} onGoToLogin={() => setView('login')} />;
+      case 'landing':
       default:
-        return <ReportsPage />;
+        return <LandingPage onNavigate={handleNavigate} />;
     }
   };
 
   return (
     <div className={`${theme} font-sans`}>
-      <div className="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen">
-        <main className="pb-24">
-          {renderPage()}
-        </main>
-        <BottomNav activePage={activePage} setActivePage={setActivePage} />
-      </div>
+      {renderContent()}
     </div>
   );
 };

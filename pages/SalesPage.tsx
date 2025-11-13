@@ -1,86 +1,26 @@
 import React, { useState } from 'react';
-import { PlusIcon, ChevronLeftIcon, UploadIcon } from '../components/icons';
+import { PlusIcon, ChevronLeftIcon, UploadIcon, ClockIcon, BuildingStorefrontIcon, MapPinIcon, TagIcon, PercentIcon, ChatBubbleLeftEllipsisIcon } from '../components/icons';
+import { BusinessRegistrationStatus } from '../types';
+import CampaignsPage from './CampaignsPage';
 
 type SalesTab = 'کسب و کار' | 'ارتقای فروش';
-type SalesView = 'main' | 'sms_campaign' | 'new_sms_form' | 'business_form';
+type SalesView = 'main' | 'business_form' | 'campaigns';
 
-const PromotionTile: React.FC<{ title: string; subtitle: string; onClick?: () => void }> = ({ title, subtitle, onClick }) => (
-    <div onClick={onClick} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300">
-        <h3 className="font-bold text-lg text-indigo-600 dark:text-indigo-400">{title}</h3>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{subtitle}</p>
-    </div>
+const PromotionTile: React.FC<{ title: string; subtitle: string; Icon: React.FC<{ className?: string }>; onClick?: () => void }> = ({ title, subtitle, Icon, onClick }) => (
+    <button onClick={onClick} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg w-full text-right hover:shadow-xl transition-shadow duration-300 flex items-center space-i-4">
+        <div className="w-12 h-12 bg-indigo-100 dark:bg-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Icon className="w-7 h-7 text-indigo-500 dark:text-indigo-400" />
+        </div>
+        <div>
+            <h3 className="font-bold text-lg text-slate-800 dark:text-slate-800">{title}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{subtitle}</p>
+        </div>
+    </button>
 );
 
-const NewSmsCampaignForm: React.FC<{ onBack: () => void }> = ({ onBack }) => (
-    <div className="p-4 space-y-6">
-        <header className="flex items-center">
-            <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
-                <ChevronLeftIcon className="w-6 h-6 transform -scale-x-100" />
-            </button>
-            <h1 className="text-xl font-bold text-center flex-grow text-slate-800 dark:text-slate-200">ایجاد کمپین پیامکی جدید</h1>
-        </header>
-        <div className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">انتخاب محدوده</label>
-                <input type="text" placeholder="مثال: منطقه ۲ تهران" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">تاریخ</label>
-                    <input type="date" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">ساعت</label>
-                    <input type="time" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-            </div>
-            <div className="relative flex items-start">
-                <div className="flex items-center h-5">
-                    <input id="comments" aria-describedby="comments-description" name="comments" type="checkbox" className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-slate-300 rounded" />
-                </div>
-                <div className="ms-3 text-sm">
-                    <label htmlFor="comments" className="font-medium text-slate-700 dark:text-slate-300">ارسال فقط به دارندگان 724</label>
-                    <p id="comments-description" className="text-slate-500 dark:text-slate-400">قیمت 30% ارزان‌تر از پکیج پیامکی اصلی</p>
-                </div>
-            </div>
-             <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">تعداد پیامک: <span className="font-bold text-indigo-600">2500</span></label>
-                <input type="range" min="500" max="10000" step="500" defaultValue="2500" className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" />
-            </div>
-             <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">متن پیام (150 کاراکتر)</label>
-                <textarea rows={4} maxLength={150} className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-            </div>
-            <button className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-300">
-                ارسال جهت بررسی
-            </button>
-        </div>
-    </div>
-);
 
-const SmsCampaignPage: React.FC<{onBack: () => void, onNew: () => void}> = ({ onBack, onNew }) => {
-    return (
-        <div className="p-4 space-y-4">
-            <header className="flex items-center">
-                <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
-                    <ChevronLeftIcon className="w-6 h-6 transform -scale-x-100" />
-                </button>
-                <h1 className="text-xl font-bold text-center flex-grow text-slate-800 dark:text-slate-200">کمپین پیامکی</h1>
-            </header>
-            <div className="text-center p-8 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl relative h-64 flex flex-col justify-center items-center">
-                <p className="text-slate-500">برای ایجاد کمپین جدید، دکمه + را بزنید.</p>
-                <p className="text-center text-slate-500 mt-8">موردی در صف وجود ندارد.</p>
-                <p className="text-center text-slate-500 mt-2">هنوز کمپینی ارسال نشده است.</p>
-                <button onClick={onNew} className="absolute bottom-4 start-4 bg-indigo-600 text-white rounded-full p-4 shadow-lg hover:bg-indigo-700 transition">
-                    <PlusIcon />
-                </button>
-            </div>
-        </div>
-    );
-}
-
-const BusinessRegistrationForm: React.FC<{ onBack: () => void }> = ({ onBack }) => (
-    <div className="p-4 space-y-6">
+const BusinessRegistrationForm: React.FC<{ onBack: () => void, onSubmit: () => void }> = ({ onBack, onSubmit }) => (
+    <div className="p-4 space-y-6 animate-fade-in">
         <header className="flex items-center">
             <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
                 <ChevronLeftIcon className="w-6 h-6 transform -scale-x-100" />
@@ -89,47 +29,31 @@ const BusinessRegistrationForm: React.FC<{ onBack: () => void }> = ({ onBack }) 
         </header>
         <div className="space-y-4">
              <div className="flex flex-col items-center space-y-2">
-                <label htmlFor="profile-pic" className="cursor-pointer flex flex-col items-center justify-center w-24 h-24 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500">
+                <label htmlFor="logo-upload" className="cursor-pointer flex flex-col items-center justify-center w-24 h-24 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500">
                     <UploadIcon className="w-8 h-8"/>
-                    <span className="text-xs mt-1">پروفایل</span>
+                    <span className="text-xs mt-1">لوگو</span>
                 </label>
-                <input id="profile-pic" type="file" className="hidden" />
+                <input id="logo-upload" type="file" className="hidden" accept="image/*" />
             </div>
             <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">نام کسب و کار</label>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">نام فروشگاه</label>
                 <input type="text" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
              <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">شماره ترمینال</label>
-                <input type="text" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-             <div className="grid grid-cols-2 gap-4">
-                <div>
-                     <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">دسته بندی اصلی</label>
-                    <select className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option>محصول</option>
-                        <option>خدمت</option>
-                    </select>
-                </div>
-                 <div>
-                    <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">دسته بندی فرعی</label>
-                    <input type="text" className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
-                </div>
-            </div>
-             <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">معرفی فروشگاه (500 کاراکتر)</label>
-                <textarea rows={5} maxLength={500} className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">معرفی کوتاه (اختیاری)</label>
+                <textarea rows={3} maxLength={200} className="mt-1 block w-full bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
             </div>
             <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">تصاویر فروشگاه</label>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">گالری تصاویر</label>
                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 dark:border-slate-600 border-dashed rounded-md">
                     <div className="space-y-1 text-center">
                         <UploadIcon className="mx-auto h-12 w-12 text-slate-400"/>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">منو، تصویر برند و فضای فروشگاه، لیست خدمات و.. در این قسمت بارگزاری گردد.</p>
+                        <p className="text-sm text-indigo-600 dark:text-indigo-400 font-semibold">برای بارگذاری کلیک کنید</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">چند تصویر از فروشگاه یا محصولات خود انتخاب کنید</p>
                     </div>
                 </div>
             </div>
-            <button className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-300">
+            <button onClick={onSubmit} className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-300">
                 ثبت درخواست
             </button>
         </div>
@@ -140,16 +64,21 @@ const BusinessRegistrationForm: React.FC<{ onBack: () => void }> = ({ onBack }) 
 const SalesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<SalesTab>('کسب و کار');
   const [view, setView] = useState<SalesView>('main');
+  const [businessStatus, setBusinessStatus] = useState<BusinessRegistrationStatus>('none');
 
-  if (view === 'sms_campaign') {
-      return <SmsCampaignPage onBack={() => setView('main')} onNew={() => setView('new_sms_form')} />;
-  }
-  if (view === 'new_sms_form') {
-      return <NewSmsCampaignForm onBack={() => setView('sms_campaign')} />;
-  }
+  const handleBusinessSubmit = () => {
+      setBusinessStatus('pending');
+      setView('main');
+  };
+
   if (view === 'business_form') {
-      return <BusinessRegistrationForm onBack={() => setView('main')} />;
+      return <BusinessRegistrationForm onBack={() => setView('main')} onSubmit={handleBusinessSubmit} />;
   }
+
+  if (view === 'campaigns') {
+      return <CampaignsPage onBack={() => setView('main')} />;
+  }
+
 
   return (
     <div className="p-4">
@@ -166,44 +95,69 @@ const SalesPage: React.FC = () => {
       </div>
 
       {activeTab === 'کسب و کار' && (
-        <div className="space-y-4 text-center">
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
-                <div className="flex justify-center items-center space-i-4 mb-4">
-                    <div className="flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">1</div>
-                        <p className="text-sm mt-1">ثبت کسب و کار</p>
+        <div className="space-y-4 text-center animate-fade-in">
+            {businessStatus === 'none' && (
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+                    <div className="flex justify-center items-center space-i-4 mb-4">
+                        <div className="flex flex-col items-center">
+                            <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">1</div>
+                            <p className="text-sm mt-1">ثبت کسب و کار</p>
+                        </div>
+                         <div className="w-16 h-0.5 bg-slate-300 dark:bg-slate-600"></div>
+                         <div className="flex flex-col items-center opacity-50">
+                            <div className="w-8 h-8 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold">2</div>
+                            <p className="text-sm mt-1">بررسی درخواست</p>
+                        </div>
                     </div>
-                     <div className="w-16 h-0.5 bg-slate-300 dark:bg-slate-600"></div>
-                     <div className="flex flex-col items-center opacity-50">
-                        <div className="w-8 h-8 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold">2</div>
-                        <p className="text-sm mt-1">بررسی درخواست</p>
-                    </div>
+                    <p className="text-slate-500 dark:text-slate-400 mb-6 text-sm">با ثبت کسب و کار خود به مشتریان بالقوه بیشتری دسترسی خواهید داشت.</p>
+                    <button 
+                        onClick={() => setView('business_form')}
+                        className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-300"
+                    >
+                        فعال‌سازی کسب و کار
+                    </button>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400 mb-6 text-sm">با ثبت کسب و کار خود به مشتریان بالقوه بیشتری دسترسی خواهید داشت.</p>
-                <button 
-                    onClick={() => setView('business_form')}
-                    className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-300"
-                >
-                    فعال‌سازی کسب و کار
-                </button>
-            </div>
+            )}
+             {businessStatus === 'pending' && (
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center">
+                   <ClockIcon className="w-12 h-12 text-amber-500 mb-3" />
+                   <h3 className="font-bold text-lg">درخواست شما در حال بررسی است</h3>
+                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">نتیجه از طریق پیامک به شما اطلاع داده خواهد شد.</p>
+                </div>
+            )}
+             {businessStatus === 'active' && (
+                 <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col items-center justify-center">
+                   <BuildingStorefrontIcon className="w-12 h-12 text-green-500 mb-3" />
+                   <h3 className="font-bold text-lg">کسب و کار شما فعال است</h3>
+                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">برای مدیریت به بخش ارتقای فروش مراجعه کنید.</p>
+                </div>
+            )}
         </div>
       )}
 
       {activeTab === 'ارتقای فروش' && (
-        <div className="space-y-4">
+        <div className="space-y-4 animate-fade-in">
           <PromotionTile 
             title="تبلیغ روی نقشه" 
             subtitle="کسب‌وکار خود را در نقشه به مشتریان نزدیک نمایش دهید." 
+            Icon={MapPinIcon}
+          />
+           <PromotionTile 
+            title="تخفیف ها" 
+            subtitle="ایجاد تخفیف برای محصولات یا دسته‌بندی‌ها."
+            Icon={PercentIcon}
+            onClick={() => setView('campaigns')}
           />
           <PromotionTile 
             title="کوپن‌ها" 
-            subtitle="با ارائه تخفیف و کوپن، مشتریان وفادار جذب کنید." 
+            subtitle="با ارائه تخفیف و کوپن، مشتریان وفادار جذب کنید."
+            Icon={TagIcon}
+            onClick={() => setView('campaigns')}
           />
           <PromotionTile 
-            title="تبلیغ پیامکی" 
-            subtitle="به مشتریان منطقه خود پیامک تبلیغاتی هدفمند ارسال کنید."
-            onClick={() => setView('sms_campaign')}
+            title="پیامک" 
+            subtitle="به مشتریان منطقه خود پیامک هدفمند ارسال کنید."
+            Icon={ChatBubbleLeftEllipsisIcon}
           />
         </div>
       )}

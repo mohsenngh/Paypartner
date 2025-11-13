@@ -27,7 +27,7 @@ const ServiceGridTile: React.FC<{ title: string; Icon: React.FC<{className?: str
   </div>
 );
 
-const allServices = [
+const baseServices = [
     { title: "درخواست کاغذ", Icon: DocumentTextIcon, bgClassName: 'bg-teal-500' },
     { title: "چک", Icon: CreditCardIcon, bgClassName: 'bg-sky-500' },
     { title: "ودیعه کارتخوان", Icon: BanknotesIcon, bgClassName: 'bg-emerald-500' },
@@ -36,9 +36,15 @@ const allServices = [
     { title: "مشاهده وضعیت بانک‌ها", Icon: BuildingLibraryIcon, bgClassName: 'bg-amber-500' },
     { title: "تاریخچه مراجعات پشتیبان", Icon: ClockIcon, bgClassName: 'bg-blue-500' },
     { title: "بازنشانی رمز", Icon: KeyIcon, bgClassName: 'bg-slate-600' },
+];
+
+const everydayServices = [
     { title: "کارت به کارت", Icon: ArrowsRightLeftIcon, bgClassName: 'bg-cyan-500' },
     { title: "قبوض", Icon: ReceiptPercentIcon, bgClassName: 'bg-orange-500' },
     { title: "خودرو", Icon: TruckIcon, bgClassName: 'bg-lime-500' },
+];
+
+const guidanceServices = [
     { title: "آموزش", Icon: BookOpenIcon, bgClassName: 'bg-fuchsia-500' },
     { title: "راهنمای کارتخوان", Icon: QuestionMarkCircleIcon, bgClassName: 'bg-indigo-500' },
     { title: "ثبت پیشنهاد", Icon: LightBulbIcon, bgClassName: 'bg-yellow-500' },
@@ -64,10 +70,37 @@ const ServicesPage: React.FC = () => {
             </div>
 
             {activeTab === 'کارتخوان' && (
-                <div className="grid grid-cols-2 gap-4 animate-fade-in">
-                   {allServices.map(service => (
-                       <ServiceGridTile key={service.title} {...service} />
-                   ))}
+                <div className="space-y-8 animate-fade-in">
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">سرویس های پایه</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                           {baseServices.map(service => (
+                               <ServiceGridTile key={service.title} {...service} />
+                           ))}
+                        </div>
+                    </div>
+                    
+                    <hr className="border-slate-200 dark:border-slate-700" />
+
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">سرویس های روزمره</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                           {everydayServices.map(service => (
+                               <ServiceGridTile key={service.title} {...service} />
+                           ))}
+                        </div>
+                    </div>
+
+                    <hr className="border-slate-200 dark:border-slate-700" />
+
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">منابع و راهنمایی</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                           {guidanceServices.map(service => (
+                               <ServiceGridTile key={service.title} {...service} />
+                           ))}
+                        </div>
+                    </div>
                 </div>
             )}
 
